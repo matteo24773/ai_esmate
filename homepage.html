@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | Math Academy</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Lexend:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900"
+    />    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/src/style.css" />
+    <style>
+      .social-icon {
+        width: 24px !important;
+        height: 24px !important;
+        display: block !important;
+      }
+      footer {
+        display: block !important;
+        margin-top: 4rem !important;
+      }
+    </style>
+    <script>
+      // Controllo iniziale per prevenire loop di reindirizzamento
+      if (sessionStorage.getItem('redirecting') === 'true') {
+        console.log('Resetting redirect flag in homepage');
+        sessionStorage.removeItem('redirecting');
+        localStorage.setItem('user_was_redirected_to_homepage', 'true');
+      }
+    </script>
+    <script type="module" src="/src/auth.js"></script>
+    <script type="module" src="/src/homepage.js" defer></script>
+  </head>
+  <body
+    class="bg-[#f9fafb] min-h-screen flex flex-col"
+    style="font-family: Lexend, 'Noto Sans', sans-serif;"
+  >
+    <!-- Top navigation - 2025 Style with Glass Morphism -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 shadow-sm py-4 px-6 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg">
+          <span class="text-white text-lg font-bold">M</span>
+        </div>
+        <h1 class="text-[#2d3748] text-xl font-bold">Math Academy</h1>
+      </div>      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
+            <span id="user-initial" class="text-white text-sm font-bold">U</span>
+          </div>
+          <span id="user-nickname" class="text-gray-700 font-medium"></span>
+        </div>
+        <a href="/math-question.html" class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">Practice</a>
+        <button id="logout-button" class="px-4 py-2 rounded-full bg-gray-100 text-[#4a5568] hover:bg-gray-200 transition-all hover:shadow-md">Logout</button>
+      </div>
+    </header>
+    
+    <!-- Main content -->
+    <main class="flex-1 container mx-auto px-4 py-8">
+      <!-- Hero Section with 2025 Design -->
+      <div class="relative mb-12 overflow-hidden rounded-2xl shadow-xl">
+        <div 
+          class="flex min-h-[320px] flex-col gap-6 bg-cover bg-center bg-no-repeat p-8 md:p-12 items-start justify-center"
+          style="background-image: linear-gradient(rgba(29, 44, 70, 0.7) 0%, rgba(33, 39, 67, 0.85) 100%), url('https://images.unsplash.com/photo-1630514969818-94aefc42ec47?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"
+        >
+          <div class="flex flex-col gap-4 max-w-xl">
+            <h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+              Welcome to Your Math Learning Journey
+            </h1>
+            <p class="text-gray-200 text-base md:text-lg font-normal leading-relaxed">
+              Track your progress, continue your learning path, and master mathematics at your own pace.
+            </p>
+          </div>
+          <a href="/math-question.html" class="practice-button mt-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all hover:translate-y-[-2px]">
+            Start Practicing Now
+          </a>
+        </div>
+      </div>
+      
+      <!-- User Dashboard with Glass Morphism -->
+      <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-md p-6 mb-10 border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Learning Dashboard</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Progress Overview -->
+          <div class="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">            <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <svg class="h-5 w-5 text-indigo-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5H21M3 12H21M3 19H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Your Progress
+            </h3>
+            <div id="user-progress">
+              <!-- Progress will be populated by JS -->
+              <div class="flex justify-center items-center h-16">
+                <div class="animate-pulse bg-indigo-100 h-4 w-full rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 w-[45%]"></div>
+                </div>
+                <span class="ml-3 text-indigo-700 font-medium">45%</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recent Activity -->
+          <div class="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">            <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <svg class="h-5 w-5 text-indigo-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 7V3m8 4V3M3 11h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Recent Activity
+            </h3>
+            <div id="recent-activity">
+              <!-- Activity will be populated by JS -->
+              <div class="space-y-3">
+                <div class="p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-indigo-200 transition-colors">
+                  <p class="font-medium text-gray-800">Completed Algebra Quiz</p>
+                  <p class="text-sm text-gray-500 mt-1">June 4, 2025</p>
+                </div>
+                <div class="p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-indigo-200 transition-colors">
+                  <p class="font-medium text-gray-800">Started Calculus Module</p>
+                  <p class="text-sm text-gray-500 mt-1">June 2, 2025</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick Actions -->
+          <div class="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">            <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <svg class="h-5 w-5 text-indigo-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Quick Actions
+            </h3>
+            <div class="space-y-3">
+              <a href="/math-question.html" class="block w-full practice-button py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg text-center transition-all shadow-md hover:shadow-lg">
+                Practice Math Questions
+              </a>
+              <button class="block w-full py-3 px-4 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg text-center transition-colors border border-gray-200 hover:border-gray-300">
+                View All Courses
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>        <!-- Exercise Types - Interactive Cards -->
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+        <svg class="h-6 w-6 mr-2 text-indigo-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>        Practice Exercises
+      </h2>      
+      <!-- Test Link for Debugging -->
+      <div class="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
+        <p class="text-yellow-800 text-sm">🔧 Debug: <a href="/math-question.html" class="text-blue-600 underline" onclick="sessionStorage.setItem('selectedTopic', 'algebra'); console.log('Test link clicked');">Direct link to math questions (Algebra)</a></p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">        <!-- Algebra Exercise Card -->
+        <div class="exercise-card group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all hover:border-indigo-200 hover:translate-y-[-2px] cursor-pointer" data-topic="algebra">
+          <div class="text-indigo-600 group-hover:text-indigo-700 transition-colors">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 18L18 6M18 18L6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-gray-900 text-lg font-bold leading-tight">Algebra</h3>
+            <p class="text-gray-600 text-sm font-normal leading-relaxed">Solve linear equations, quadratic formulas, and algebraic expressions.</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">25 Problems</span>
+              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Beginner</span>
+            </div>
+          </div>
+          <div class="mt-auto py-3 px-5 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm hover:shadow-md group-hover:scale-105 text-center">
+            Start Practice
+          </div>
+        </div>
+        
+        <!-- Derivatives Exercise Card -->
+        <div class="exercise-card group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all hover:border-purple-200 hover:translate-y-[-2px] cursor-pointer" data-topic="derivatives">
+          <div class="text-purple-600 group-hover:text-purple-700 transition-colors">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3l18 18M8 12l8-8M12 8l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-gray-900 text-lg font-bold leading-tight">Derivatives</h3>
+            <p class="text-gray-600 text-sm font-normal leading-relaxed">Master calculus derivatives, chain rule, and differentiation techniques.</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">18 Problems</span>
+              <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">Intermediate</span>
+            </div>
+          </div>
+          <button class="mt-auto py-3 px-5 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm hover:shadow-md group-hover:scale-105">
+            Start Practice
+          </button>
+        </div>
+        
+        <!-- Geometry Exercise Card -->
+        <div class="exercise-card group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all hover:border-emerald-200 hover:translate-y-[-2px] cursor-pointer" data-topic="geometry">
+          <div class="text-emerald-600 group-hover:text-emerald-700 transition-colors">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-gray-900 text-lg font-bold leading-tight">Geometry</h3>
+            <p class="text-gray-600 text-sm font-normal leading-relaxed">Explore areas, perimeters, angles, and geometric relationships.</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">22 Problems</span>
+              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Beginner</span>
+            </div>
+          </div>
+          <button class="mt-auto py-3 px-5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm hover:shadow-md group-hover:scale-105">
+            Start Practice
+          </button>
+        </div>
+        
+        <!-- Statistics Exercise Card -->
+        <div class="exercise-card group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all hover:border-orange-200 hover:translate-y-[-2px] cursor-pointer" data-topic="statistics">
+          <div class="text-orange-600 group-hover:text-orange-700 transition-colors">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 6h-4l-3-3H9L6 6H3a2 2 0 00-2 2v12a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 18a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-2">
+            <h3 class="text-gray-900 text-lg font-bold leading-tight">Statistics</h3>
+            <p class="text-gray-600 text-sm font-normal leading-relaxed">Analyze data, probability distributions, and statistical inference.</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">20 Problems</span>
+              <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">Intermediate</span>
+            </div>
+          </div>
+          <button class="mt-auto py-3 px-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm hover:shadow-md group-hover:scale-105">
+            Start Practice
+          </button>
+        </div>
+        </div>
+      </div>
+        <!-- Call to Action - 2025 Style with Dark Background -->
+      <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 16px; padding: 40px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; overflow: hidden;">
+        <!-- Abstract geometric elements -->
+        <div style="position: absolute; top: 0; right: 0; width: 256px; height: 256px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; filter: blur(48px); transform: translateY(-50%) translateX(50%);"></div>
+        <div style="position: absolute; bottom: 0; left: 0; width: 256px; height: 256px; background: rgba(165, 180, 252, 0.1); border-radius: 50%; filter: blur(48px); transform: translateY(50%) translateX(-50%);"></div>
+        
+        <div style="position: relative; z-index: 10;">
+          <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 16px; letter-spacing: -0.025em; color: white;">Ready to Elevate Your Math Skills?</h2>
+          <p style="margin-bottom: 32px; max-width: 672px; margin-left: auto; margin-right: auto; color: #e0e7ff; font-size: 1.125rem;">Join thousands of students who are mastering mathematics with our interactive lessons and practice exercises.</p>
+          <button style="background: white; color: #4f46e5; font-weight: bold; padding: 12px 32px; border-radius: 9999px; transition: all 0.3s; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: none; cursor: pointer; font-size: 16px;" 
+                  onmouseover="this.style.color='#3730a3'; this.style.background='#eef2ff'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1)'"
+                  onmouseout="this.style.color='#4f46e5'; this.style.background='white'; this.style.transform='scale(1)'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.1)'"
+                  class="practice-button">
+            Start Practicing Now
+          </button>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer - 2025 Style -->
+    <footer class="bg-white mt-16 py-12 border-t border-gray-100">
+      <div class="container mx-auto px-6">
+        <!-- Logo and tagline -->
+        <div class="flex flex-col items-center mb-10">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-600 to-violet-500 flex items-center justify-center shadow-md">
+              <span class="text-white text-lg font-bold">M</span>
+            </div>
+            <h3 class="text-gray-800 text-xl font-bold">Math Academy</h3>
+          </div>
+          <p class="text-gray-500 max-w-md text-center">Empowering mathematical excellence through innovative education since 2020.</p>
+        </div>
+        
+        <!-- Links and social media -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
+          <div class="flex flex-wrap justify-center gap-8">
+            <a class="text-gray-600 hover:text-indigo-600 transition-colors font-medium" href="#">Privacy Policy</a>
+            <a class="text-gray-600 hover:text-indigo-600 transition-colors font-medium" href="#">Terms of Service</a>
+            <a class="text-gray-600 hover:text-indigo-600 transition-colors font-medium" href="#">Contact Us</a>
+            <a class="text-gray-600 hover:text-indigo-600 transition-colors font-medium" href="#">About Us</a>
+          </div>          <div class="flex justify-center gap-6">
+            <a href="#" class="text-gray-400 hover:text-indigo-600 transition-colors p-2">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+              </svg>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-indigo-600 transition-colors p-2">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/>
+              </svg>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-indigo-600 transition-colors p-2">
+              <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="border-t border-gray-100 pt-8">
+          <p class="text-center text-gray-500">© 2025 Math Academy. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>  </body>
+</html>
