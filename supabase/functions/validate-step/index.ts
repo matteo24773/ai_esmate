@@ -5,6 +5,8 @@ import * as math from 'https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/esm/math.j
 
 // Helper function to normalize mathematical expressions for comparison
 function normalizeExpression(expr: string): string {
+  if (!expr) return '';
+  
   return expr
     .replace(/\s+/g, '') // Remove all spaces
     .toLowerCase()
@@ -22,8 +24,14 @@ function normalizeExpression(expr: string): string {
     .replace(/\*/g, '') // Remove multiplication signs
     .replace(/\(1\)/g, '1') // Replace (1) with 1
     .replace(/1\*/g, '') // Remove 1* multiplications
-    .replace(/\*1/g, '') // Remove *1 multiplications    .replace(/\+-/g, '-') // Replace +- with -
-    .replace(/-\+/g, '-'); // Replace -+ with -
+    .replace(/\*1/g, '') // Remove *1 multiplications
+    .replace(/\+-/g, '-') // Replace +- with -
+    .replace(/-\+/g, '-') // Replace -+ with -
+    // Add implied multiplication (but later we'll remove these symbols)
+    .replace(/([a-z])([0-9])/g, '$1*$2') // Add implied multiplication between variable and number
+    .replace(/([0-9])([a-z])/g, '$1*$2') // Add implied multiplication between number and variable
+    // Normalize again by removing any remaining multiplication symbols to ensure consistent representation
+    .replace(/\*/g, '');
 }
 
 // Advanced step validation with multiple acceptable paths
@@ -180,37 +188,93 @@ function evalArithmetic(expr: string): number | null {
   try {
     // Only allow safe characters
     if (/^[0-9xX+\-*/(). ]+$/.test(expr)) {
-      // Replace x with 1 for evaluation (for simple checks)
+      // Normalize the expression: remove spaces
+      const normalized = expr.replace(/\s+/g, '');
+      
+      // Handle basic arithmetic operations
+      if (/^[0-9+\-*/().]+$/.test(normalized)) {
+        // eslint-disable-next-line no-eval
+        return Function(`"use strict";return (${normalized})`)();
+      }
+      
+      // If variables are present, replace with 1 for simple equivalence checking
       // eslint-disable-next-line no-eval
-      return Function(`"use strict";return (${expr.replace(/x/gi, '1')})`)();
+      return Function(`"use strict";return (${normalized.replace(/[xX]/g, '1')})`)();
     }
-  } catch {}
+  } catch (e) {
+    console.error("Error in evalArithmetic:", e);
+  }
   return null;
 }
 
 // Helper function to check if two mathematical expressions are equivalent
 function areExpressionsEquivalent(expr1: string, expr2: string): boolean {
-  // Extract the right side of equations for comparison
-  const getRightSide = (expr: string) => {
-    const parts = expr.split('=');
-    return parts.length > 1 ? parts[1].trim() : expr.trim();
+  // Check if either expression is empty
+  if (!expr1 || !expr2) return false;
+  
+  // First, try direct normalization comparison
+  if (normalizeExpression(expr1) === normalizeExpression(expr2)) {
+    return true;
+  }
+  
+  // Extract both sides of equations for comparison
+  const getEquationSides = (expr: string) => {
+    const parts = expr.split('=').map(p => p.trim());
+    return parts.length > 1 ? parts : [expr.trim(), expr.trim()];
   };
 
-  const right1 = getRightSide(expr1);
-  const right2 = getRightSide(expr2);
-
-  // Try numeric evaluation (arithmetic)
-  const val1 = evalArithmetic(right1);
-  const val2 = evalArithmetic(right2);
-  if (val1 !== null && val2 !== null) {
-    return Math.abs(val1 - val2) < 0.0001;
-  }
-
-  // Fallback: old logic
-  const fallback1 = evaluateSimpleExpression(right1);
-  const fallback2 = evaluateSimpleExpression(right2);
-  if (fallback1 !== null && fallback2 !== null) {
-    return Math.abs(fallback1 - fallback2) < 0.0001;
+  const sides1 = getEquationSides(expr1);
+  const sides2 = getEquationSides(expr2);
+  
+  // Check left sides for equality if both are equations
+  if (sides1.length > 1 && sides2.length > 1) {
+    const left1 = normalizeExpression(sides1[0]);
+    const left2 = normalizeExpression(sides2[0]);
+    
+    // If left sides are equal, we just need to check right sides
+    if (left1 === left2) {
+      // Just need to check right sides
+      const right1 = sides1[1];
+      const right2 = sides2[1];
+      
+      // Try numeric evaluation (arithmetic)
+      try {
+        // Try evaluating both expressions as arithmetic
+        const val1 = evalArithmetic(right1);
+        const val2 = evalArithmetic(right2);
+        if (val1 !== null && val2 !== null) {
+          return Math.abs(val1 - val2) < 0.0001;
+        }
+        
+        // Fallback: try simple expression evaluation
+        const fallback1 = evaluateSimpleExpression(right1);
+        const fallback2 = evaluateSimpleExpression(right2);
+        if (fallback1 !== null && fallback2 !== null) {
+          return Math.abs(fallback1 - fallback2) < 0.0001;
+        }
+      } catch (e) {
+        console.error("Error evaluating expressions:", e);
+      }
+    }
+  } else {
+    // Handle non-equation expressions (like just "8" or "24/3")
+    try {
+      // Try numeric evaluation (arithmetic)
+      const val1 = evalArithmetic(expr1);
+      const val2 = evalArithmetic(expr2);
+      if (val1 !== null && val2 !== null) {
+        return Math.abs(val1 - val2) < 0.0001;
+      }
+      
+      // Fallback: simple evaluation
+      const fallback1 = evaluateSimpleExpression(expr1);
+      const fallback2 = evaluateSimpleExpression(expr2);
+      if (fallback1 !== null && fallback2 !== null) {
+        return Math.abs(fallback1 - fallback2) < 0.0001;
+      }
+    } catch (e) {
+      console.error("Error evaluating non-equation expressions:", e);
+    }
   }
 
   return false;

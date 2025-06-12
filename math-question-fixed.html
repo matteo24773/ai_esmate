@@ -81,7 +81,8 @@
     </style>
     <!-- Supabase client (standalone) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    <!-- Inline auth check -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Inline auth check -->
     <script>
       // Simple auth check without module
       async function checkAuth() {
@@ -91,45 +92,22 @@
             const { data: { session } } = await supabase.auth.getSession();
             const legacyUser = localStorage.getItem('user_logged_in');
             
-            // Temporaneamente disabilitato il reindirizzamento per test
-            // if (!session && !legacyUser) {
-            //   window.location.href = '/index.html';
-            // }
-            
-            // Per test, impostiamo un utente fittizio
             if (!session && !legacyUser) {
-              localStorage.setItem('user_logged_in', 'test_user');
-              console.log('Test user created for development purposes');
+              window.location.href = '/index.html';
             }
           } else {
             // Fallback su autenticazione legacy senza Supabase
             const legacyUser = localStorage.getItem('user_logged_in');
-            
-            // Temporaneamente disabilitato il reindirizzamento per test
-            // if (!legacyUser) {
-            //   window.location.href = '/index.html';
-            // }
-            
-            // Per test, impostiamo un utente fittizio
             if (!legacyUser) {
-              localStorage.setItem('user_logged_in', 'test_user');
-              console.log('Test user created for development purposes');
+              window.location.href = '/index.html';
             }
           }
         } catch (error) {
           console.error('Auth check error:', error);
           // Fallback in caso di errore
           const legacyUser = localStorage.getItem('user_logged_in');
-          
-          // Temporaneamente disabilitato il reindirizzamento per test
-          // if (!legacyUser) {
-          //   window.location.href = '/index.html';
-          // }
-          
-          // Per test, impostiamo un utente fittizio
           if (!legacyUser) {
-            localStorage.setItem('user_logged_in', 'test_user');
-            console.log('Test user created for development purposes');
+            window.location.href = '/index.html';
           }
         }
       }
